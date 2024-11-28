@@ -6,9 +6,9 @@ cd "sra5"
 start /B "" "sra5.exe"
 
 @REM Exécution OneDollarIvy
-cd "..\OneDollarIvy"
+cd "..\OneDollarIvy\windows-amd64"
 start /B "" "OneDollarIvy.exe"
 
 @REM Exécution Palette
-cd "..\Palette"
+cd "..\..\Palette\windows-amd64"
 start /B "" "Palette.exe"

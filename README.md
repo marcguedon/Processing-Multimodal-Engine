@@ -2,9 +2,17 @@
 
 Projet réalisé par **Bastien LALANNE** et **Marc GUEDON** dans le câdre de la 3ème année d'école d'ingénieur en Systèmes Robotiques et Intéractifs à l'UPSSITECH.
 
+## Installation
+
+Pour faire fonctionner notre moteur multimodal, il faut seulement installer [Java Runtime Environement 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html). \
+**ATTENTION**: le moteur multimodal ne fonctionne que sous Windows.
+
 ## Utilisation
 
-
+Pour lancer notre moteur multimodal, il suffit simplement de d'exécuter la commande suivant dans le dossier courant:
+```console
+.\launcher.bat
+```
 
 ## Grammaire
 
@@ -38,4 +46,4 @@ COULEUR = {rouge, orange, jaune, vert, bleu, violet, noir}
 
 ### Quitter l'application
 
-- Prnoncer "QUITTER" pour quitter la palette.
+- Prononcer "QUITTER" pour quitter la palette.
