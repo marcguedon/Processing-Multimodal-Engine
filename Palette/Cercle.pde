@@ -7,7 +7,7 @@ public class Cercle extends Forme {
   int rayon;
   
   public Cercle(Point p) {
-    super(p);
+    super(p, FormType.CIRCLE);
     this.rayon=80;
   }
    

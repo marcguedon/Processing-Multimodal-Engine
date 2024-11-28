@@ -6,7 +6,7 @@ public class Losange extends Forme {
   Point A, B,C,D;
   
   public Losange(Point p) {
-    super(p);
+    super(p, FormType.DIAMOND);
     // placement des points
     A = new Point();    
     A.setLocation(p);

@@ -9,12 +9,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Point;
 import fr.dgac.ivy.*;
+import java.util.function.Predicate;
 
 Ivy bus;
 ArrayList<Forme> formes;
 FSM mae;
 int indice_forme;
-PImage sketch_icon;
 float seuil = 0.80;
 
 String sra5_action = "";
@@ -23,7 +23,6 @@ String sra5_form = "";
 String sra5_couleur = "";
 String sra5_localisation = "";
 String sra5_confidence = "";
-
 String reco_form = "";
 
 void setup()
@@ -32,7 +31,7 @@ void setup()
     surface.setResizable(true);
     surface.setTitle("Palette multimodale");
     surface.setLocation(20, 20);
-    sketch_icon = loadImage("Palette.jpg");
+    PImage sketch_icon = loadImage("Palette.jpg");
     surface.setIcon(sketch_icon);
     
     formes = new ArrayList();
@@ -44,6 +43,11 @@ void setup()
     {
         bus = new Ivy("Palette", "Palette is ready", null);
         bus.start("127.255.255.255:2010");
+        
+        delay(1000);
+
+        bus.sendMsg("sra5 -p on");
+
         
         bus.bindMsg("^sra5 Parsed=action=(.*) where=(.*) form=(.*) color=(.*) localisation=(.*) Confidence=(.*) NP=(.*) Num_A=(.*)", new IvyMessageListener()
         {
@@ -81,7 +85,7 @@ void setup()
                             break;
                             
                         case "DELETE":               
-                            delete_form(p);
+                            delete_forms(p);
                             
                             mae = FSM.AFFICHER_FORMES;
                             break;
@@ -145,7 +149,6 @@ void setup()
 void draw()
 {
     background(0);
-    Point p = new Point(mouseX, mouseY);
       
     switch (mae)
     {
@@ -198,7 +201,7 @@ void mousePressed()
             break;
             
         case DEPLACER_FORMES_SELECTION:
-            for (int i=0;i<formes.size();i++)
+            for (int i = 0; i < formes.size(); i++)
             {      
                 if (formes.get(i).isClicked(p))
                 {
@@ -320,7 +323,7 @@ void create_form(Point pos)
 }
 
 Forme create_form_from_form_str(String form, Point pos)
-{
+{        
     switch (form)
     {
         case "CIRCLE":
@@ -360,7 +363,7 @@ Forme create_form_from_form_str(String form, Point pos)
     }
 }
 
-void delete_form(Point p)
+void delete_forms(Point p)
 {
     if(sra5_pointage.equals("THIS"))
     {
@@ -377,23 +380,23 @@ void delete_form(Point p)
     else if (!sra5_couleur.equals("undefined") && !sra5_form.equals("undefined"))
     {
         println("Suppression par forme et couleur");
-        delete_object_by_form_color(sra5_form, get_color_from_color_str(sra5_couleur));
+        delete_by_form_color(sra5_form, get_color_from_color_str(sra5_couleur));
     }
     
     else if (!sra5_form.equals("undefined"))
     {
         println("Suppression par forme");
-        delete_object_by_form(sra5_form);
+        delete_by_form(sra5_form);
     }
     
     else if (!sra5_couleur.equals("undefined"))
     {
         println("Suppression par couleur");
-        delete_object_by_color(get_color_from_color_str(sra5_couleur));
+        delete_by_color(get_color_from_color_str(sra5_couleur));
     }
 }
 
-void delete_object_by_form_color(String form, color couleur)
+void delete_by_form_color(String form, color couleur)
 {
     for (int i = formes.size() - 1; i >= 0; i--)
     {
@@ -422,7 +425,7 @@ void delete_object_by_form_color(String form, color couleur)
     } 
 }
 
-void delete_object_by_form(String form)
+void delete_by_form(String form)
 {
     for (int i = formes.size() - 1; i >= 0; i--)
     {
@@ -451,7 +454,7 @@ void delete_object_by_form(String form)
     } 
 }
 
-void delete_object_by_color(color couleur)
+void delete_by_color(color couleur)
 {    
     for (int i = formes.size() - 1; i >= 0; i--)
     {
