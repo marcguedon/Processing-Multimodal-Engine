@@ -220,11 +220,6 @@ public void mousePressed()
     switch (mae)
     {
         case AFFICHER_FORMES:
-            for (int i = 0; i < formes.size(); i++)
-            {
-                if ((formes.get(i)).isClicked(p))
-                    (formes.get(i)).setColor(color(random(0, 255), random(0, 255), random(0, 255)));
-            } 
             break;
             
         case DEPLACER_FORMES_SELECTION:

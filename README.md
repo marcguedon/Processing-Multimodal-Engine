@@ -5,13 +5,15 @@ Projet réalisé par **Bastien LALANNE** et **Marc GUEDON** dans le câdre de la
 ## Installation
 
 Pour faire fonctionner notre moteur multimodal, il faut seulement installer [Java Runtime Environement 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html). \
-**ATTENTION**: le moteur multimodal ne fonctionne que sous Windows.
+**ATTENTION**: le moteur multimodal n'a été testé que sous Windows.
 
 ## Utilisation
 
-Pour lancer notre moteur multimodal, il suffit simplement de d'exécuter la commande suivant dans le dossier courant:
+Pour lancer notre moteur multimodal, il suffit simplement d'exécuter la commande suivante dans le dossier courant. Les applications Palette, SRA5 et OneDollarIvy seront alors exécutées. Il est également possible d'exécuter le Visionneur en ajoutant l'option `--visionneur` ou son diminutif `-v`.
 ```console
 .\launcher.bat
+.\launcher.bat -v
+.\launcher.bat --visionneur
 ```
 
 ## Grammaire
