@@ -54,12 +54,14 @@ Pour relancer l'ensemble des applications, il faut préalablement s'assurer de l
 - Appuyer respectivement sur la touche "c", "r", "t" ou "l" pour ajouter un cercle, un rectangle, un triangle ou un losange gris où se trouve le pointeur. Si le pointeur se trouve en dehors de la fenêtre, la forme s'affiche au dernier endroit où était le pointeur dans la fenêtre.
 - Prononcer "Dessiner + FORME + COULEUR" pour ajouter un objet ayant la forme et la couleur prononcée.
 - Prononcer "Dessiner + FORME" pour ajouter un objet ayant la forme prononcée.
-- Dessiner la forme souhaitée sur la fenêtre de OneDollarIvy, puis prononcer "Dessiner cette forme [+ COULEUR] + ici", pour ajouter un objet ayant la forme prononcée où se trouve le pointer. Au delà de 5s, la forme dessinée ne sera plus prise en compte, il faudra alors recommencer. De même, si 5s après avoir dessiné une forme, rien n'a été prononcé, l'action est annulée.
+- Prononcer "Dessiner + FORME + COULEUR + LOCALISATION" pour ajouter un objet ayant la forme et la couleur prononcée à l'emplacement du pointeur.
+- Prononcer "Dessiner + FORME + LOCALISATION" pour ajouter un objet ayant la forme prononcée à l'emplacement du pointeur.
+- Dessiner la forme souhaitée sur la fenêtre de OneDollarIvy, puis prononcer "Dessiner cette forme [+ COULEUR] + LOCALISATION", pour ajouter un objet ayant la forme prononcée où se trouve le pointer. Au delà de 5s, la forme dessinée ne sera plus prise en compte, il faudra alors recommencer. De même, si 5s après avoir dessiné une forme, rien n'a été prononcé, l'action est annulée.
 
 ### Déplacement d'une forme
 
 - Appuyer sur "m" et cliquer sur l'objet voulu, puis cliquer à l'endroit où déplacer la forme présélectionnée. Si 5s après avoir appuyé sur "m", aucun objet est sélectionné, l'action est annulée. De même pour choisir le nouvel emplacement de l'objet.
-- Cliquer sur l'objet à déplacer, puis prononcer "Déplacer cette forme ici", puis cliquer à l'endroit où déplacer la forme présélectionnée.
+- prononcer "Déplacer + POINTAGE", puis cliquer sur l'objet à déplacer, puis cliquer à l'endroit où déplacer la forme présélectionnée.
 
 ### Suppression de formes
 
@@ -67,6 +69,7 @@ Pour relancer l'ensemble des applications, il faut préalablement s'assurer de l
 - Prononcer "Supprimer + FORME + COULEUR" pour supprimer l'ensemble des objets ayant la forme et la couleur prononcées.
 - Prononcer "Supprimer + FORME" pour supprimer l'ensemble des objets ayant la forme prononcée.
 - Prononcer "Supprimer + COULEUR" pour supprimer l'ensemble des objets ayant la couleur prononcée.
+- Prononcer "Supprimer + POINTAGE" puis cliquer sur un objet pour supprimer l'objet en question.
 
 ### Quitter l'application
 
