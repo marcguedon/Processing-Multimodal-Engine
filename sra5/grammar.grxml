@@ -31,12 +31,15 @@
 			<item> supprimer <tag> out = "DELETE" </tag></item>
 			<item> effacer <tag> out = "DELETE" </tag></item>
 			
-			<item> déplacer  <tag> out = "MOVE" </tag></item>
-			<item> bouger  <tag> out = "MOVE" </tag></item>
+			<item> déplacer <tag> out = "MOVE" </tag></item>
+			<item> bouger <tag> out = "MOVE" </tag></item>
 
 			<item> quitter <tag> out = "QUIT" </tag></item>
 			<item> sortir <tag> out = "QUIT" </tag></item>
 			<item> arrêter <tag> out = "QUIT" </tag></item>
+            <item> quitter l'application <tag> out = "QUIT" </tag></item>
+            <item> sortir de l'application <tag> out = "QUIT" </tag></item>
+            <item> arrêter l'application <tag> out = "QUIT" </tag></item>
 		</one-of>
 	</rule>
 

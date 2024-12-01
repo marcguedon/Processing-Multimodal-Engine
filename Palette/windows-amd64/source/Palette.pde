@@ -9,13 +9,18 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.awt.Point;
 import fr.dgac.ivy.*;
-import java.util.function.Predicate;
 
 Ivy bus;
+
 ArrayList<Forme> formes;
 FSM mae;
 int indice_forme;
-float seuil = 0.80;
+
+final float seuil = 0.80;
+final int TIMER_DURATION = 5000;
+
+int start_time = 0;
+boolean timer_active = false;
 
 String sra5_action = "";
 String sra5_pointage = "";
@@ -43,12 +48,9 @@ void setup()
     {
         bus = new Ivy("Palette", "Palette is ready", null);
         bus.start("127.255.255.255:2010");
-        
         delay(1000);
-
         bus.sendMsg("sra5 -p on");
 
-        
         bus.bindMsg("^sra5 Parsed=action=(.*) where=(.*) form=(.*) color=(.*) localisation=(.*) Confidence=(.*) NP=(.*) Num_A=(.*)", new IvyMessageListener()
         {
             public void receive(IvyClient client, String[] args)
@@ -60,8 +62,6 @@ void setup()
                 sra5_localisation = args[4];
                 sra5_confidence = args[5].replace(',', '.');
                 
-                Point p = get_point_from_localisation_str(sra5_localisation);
-                
                 if(float(sra5_confidence) < seuil)
                     println("Répétez s'il vous plait");
                     
@@ -70,28 +70,49 @@ void setup()
                     switch (sra5_action)
                     {
                         case "CREATE":
-                            create_form(p);
-                            
+                            println("Ajout forme");
+                            create_form();
                             mae = FSM.AFFICHER_FORMES;
+                            
                             break;
                         
                         case "MOVE":
-                            //move_form();
-                            
+                            if(formes.isEmpty())
+                            {
+                                mae = FSM.AFFICHER_FORMES;
+                                break;
+                            }
+                        
                             println("Déplacement forme");
                             mae = FSM.DEPLACER_FORMES_SELECTION;
+                            start_timer();
                             
-                            // mae = FSM.AFFICHER_FORMES;
                             break;
                             
-                        case "DELETE":               
-                            delete_forms(p);
+                        case "DELETE":
+                            if(formes.isEmpty())
+                            {
+                                mae = FSM.AFFICHER_FORMES;
+                                break;
+                            }
+    
+                            if(sra5_pointage.equals("THIS"))
+                            {
+                                mae = FSM.SUPPRIMER_FORMES;
+                            }
+                        
+                            else
+                            {
+                                delete_forms();
+                            }
                             
-                            mae = FSM.AFFICHER_FORMES;
+                            println("Suppression forme");
+                            start_timer();
                             break;
                         
                         case "QUIT":
-                            //exit();
+                            println("Quitter");
+                            exit();
                             break;
                     }
                 }
@@ -133,7 +154,7 @@ void setup()
                     {
                         reco_form = null;
                     }
-                }, 5000);
+                }, TIMER_DURATION);
                 
                 try
                 {
@@ -149,20 +170,30 @@ void setup()
 void draw()
 {
     background(0);
+    
+    if (timer_active && millis() - start_time >= TIMER_DURATION) {
+        if(mae == FSM.DEPLACER_FORMES_DESTINATION || mae == FSM.DEPLACER_FORMES_SELECTION || mae == FSM.SUPPRIMER_FORMES)
+        {
+            mae = FSM.AFFICHER_FORMES;
+            println("Action forme annulé");
+        }
+            
+        timer_active = false;
+    }
       
     switch (mae)
     {
         case INITIAL:  // Etat INITIAL
             background(255);
             fill(0);
-            text("Etat initial (c(ercle)/l(osange)/r(ectangle)/t(riangle) pour créer la forme à la position courante)", 50, 50);
-            text("m(ove)+ click pour sélectionner un objet et click pour sa nouvelle position", 50, 80);
-            text("d(elete)+ click pour supprimer un objet", 50, 110);
-            text("click sur un objet pour changer sa couleur de manière aléatoire", 50, 140);
+            text("C(ercle), L(osange), R(ectangle) ou T(riangle) pour créer la forme correspondante à la position courante)", 25, 25);
+            text("M(ove) puis click pour sélectionner un objet et click pour sa nouvelle position", 25, 45);
+            text("D(elete) puis click pour supprimer un objet", 25, 65);
             break;
             
         case AFFICHER_FORMES:
             text("Creation d'une forme", 50, 140);
+            
         case DEPLACER_FORMES_SELECTION:
 
         case DEPLACER_FORMES_DESTINATION: 
@@ -208,6 +239,8 @@ void mousePressed()
             
             if (indice_forme == -1)
                 mae = FSM.AFFICHER_FORMES;
+                
+            start_timer();
             break;
             
         case DEPLACER_FORMES_DESTINATION:
@@ -222,6 +255,7 @@ void mousePressed()
             for (int i = 0; i < formes.size(); i++) {
                 if ((formes.get(i)).isClicked(p))
                     formes.remove(i);
+                    println("Suppresion forme sélectionnée");
             }
             mae = FSM.AFFICHER_FORMES;
             break;
@@ -238,32 +272,54 @@ void keyPressed()
     switch(key)
     {
         case 'r': // Rectangle
-            Forme f = new Rectangle(p);
-            formes.add(f);
+            formes.add(new Rectangle(p));
+            
+            println("Ajout rectangle");
             mae = FSM.AFFICHER_FORMES;
             break;
         case 'c': // Circle
-            Forme f2 = new Cercle(p);
-            formes.add(f2);
+            formes.add(new Cercle(p));
+            
+            println("Ajout cercle");
             mae = FSM.AFFICHER_FORMES;
             break;
         case 't': // Triangle
-            Forme f3 = new Triangle(p);
-            formes.add(f3);
+            formes.add(new Triangle(p));
+            
+            println("Ajout triangle");
             mae = FSM.AFFICHER_FORMES;
             break;  
         case 'l': // Diamond
-            Forme f4 = new Losange(p);
-            formes.add(f4);
+            formes.add(new Losange(p));
+            
+            println("Ajout losange");
             mae = FSM.AFFICHER_FORMES;
             break;    
         case 'm': // Move
+            if(formes.isEmpty())
+                break;
+        
+            println("Déplacement forme");
             mae = FSM.DEPLACER_FORMES_SELECTION;
+            
+            start_timer();
             break;
         case 'd': // Delete
+            if(formes.isEmpty())
+                break;
+                
+            println("Suppression forme");
             mae = FSM.SUPPRIMER_FORMES;
+            
+            start_timer();
             break;
     }
+}
+
+void start_timer()
+{
+    start_time = millis();
+    timer_active = true;
 }
 
 Point get_point_from_localisation_str(String localisation)
@@ -297,24 +353,17 @@ color get_color_from_color_str(String color_msg)
     }
 }
 
-void create_form(Point pos)
+void create_form()
 {
-    Forme form;
-                            
-    if(sra5_pointage.equals("THIS"))
-    {
-        println("Creation forme par reco");
-        form = create_form_from_form_str(reco_form, pos);
-    }
+    Point pos = get_point_from_localisation_str(sra5_localisation);
+    String form_str = sra5_pointage.equals("THIS") ? reco_form : sra5_form;
+    Forme form = create_form_from_form_str(form_str, pos);
     
-    else
+    if(form != null)
     {
-        println("Creation forme par parole");
-        form = create_form_from_form_str(sra5_form, pos);
+        form.setColor(get_color_from_color_str(sra5_couleur));
+        formes.add(form);
     }
-
-    form.setColor(get_color_from_color_str(sra5_couleur));
-    formes.add(form);
 }
 
 Forme create_form_from_form_str(String form, Point pos)
@@ -354,25 +403,14 @@ Forme create_form_from_form_str(String form, Point pos)
         case "rectangle_g":
             return new Rectangle(pos);
         default:
-            return new Cercle(pos);
+            return null;
     }
 }
 
-void delete_forms(Point p)
+void delete_forms()
 {
-    if(sra5_pointage.equals("THIS"))
-    {
-        for (int i = 0; i < formes.size(); i++)
-        {
-            if ((formes.get(i)).isClicked(p))
-            {
-                println("Suppression forme cliquée");
-                formes.remove(i);
-            }
-        }
-    }
-    
-    else if (!sra5_couleur.equals("undefined") && !sra5_form.equals("undefined"))
+   
+    if (!sra5_couleur.equals("undefined") && !sra5_form.equals("undefined"))
     {
         println("Suppression par forme et couleur");
         delete_by_form_color(sra5_form, get_color_from_color_str(sra5_couleur));
@@ -407,7 +445,7 @@ void delete_by_form_color(String form, color couleur)
                     formes.remove(i);
                 break;
                 
-            case "TRIANLGE":
+            case "TRIANGLE":
                 if (formes.get(i).getClass() == Triangle.class && (formes.get(i)).getColor() == couleur)
                     formes.remove(i);
                 break;
@@ -436,7 +474,7 @@ void delete_by_form(String form)
                     formes.remove(i);
                 break;
                 
-            case "TRIANLGE":
+            case "TRIANGLE":
                 if (formes.get(i).getClass() == Triangle.class)
                     formes.remove(i);
                 break;

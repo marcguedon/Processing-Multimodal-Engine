@@ -6,7 +6,7 @@ if "%1"=="-v" (
 )
 
 :: Exécution SRA5
-cd "sra5"
+cd "SRA5"
 start /B "" "sra5.exe"
 
 :: Exécution OneDollarIvy
